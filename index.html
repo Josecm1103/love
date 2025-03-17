@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Think They Call This Love</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Raleway:wght@300;400;700&display=swap');
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('imagenes/fondo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Raleway', sans-serif;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Letras centradas */
+        #lyrics-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            width: 60%;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            z-index: 2;
+        }
+
+        /* Botón debajo */
+        #play-button {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            font-size: 20px;
+            font-family: 'Raleway', sans-serif;
+            font-weight: bold;
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: 0.3s;
+            z-index: 3;
+        }
+
+        #play-button:hover {
+            background-color: #c9184a;
+        }
+
+        /* Estilo de los corazones que caen */
+        .heart {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('imagenes/corazon.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(-100px);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lyrics-container">Presiona el botón para comenzar</div>
+
+    <button id="play-button">Reproducir Canción</button>
+
+    <audio id="song" src="cancion.mp3"></audio>
+
+    <script>
+        const lyricsData = [
+            { time: 10.626, text: "They say" },
+            { time: 14.291, text: "You know when you know" },
+            { time: 17.884, text: "So let's face it, you had me at hello" },
+            { time: 25.602, text: "Hesitation never helps" },
+            { time: 28.942, text: "How could this be anything, anything else?" },
+            { time: 33.171, text: "When" },
+            { time: 35.040, text: "All I dream of is your eyes" },
+            { time: 38.450, text: "All I long for is your touch" },
+            { time: 41.974, text: "And darling, something tells me that's enough, mmm" },
+            { time: 48.607, text: "You can say that I'm a fool" },
+            { time: 52.216, text: "And I don't know very much, but" },
+            { time: 55.924, text: "I Think They Call This Love" },
+            { time: 65.763, text: "One smile, one kiss, two lonely hearts is all that it takes" },
+            { time: 72.766, text: "Now baby, you're on my mind, every night, every day" },
+            { time: 80.415, text: "Good vibrations getting loud" },
+            { time: 83.774, text: "How could this be anything, anything else?" },
+            { time: 88.133, text: "When" },
+            { time: 89.920, text: "All I dream of is your eyes" },
+            { time: 93.430, text: "All I long for is your touch" },
+            { time: 96.922, text: "And darling, something tells me that's enough, mmm" },
+            { time: 103.721, text: "You can say that I'm a fool" },
+            { time: 107.317, text: "And I don't know very much, but" },
+            { time: 110.620, text: "I Think They Call This Love" },
+            { time: 117.370, text: "Oh, I Think They Call This Love" },
+            { time: 136.097, text: "What could this be" },
+            { time: 137.834, text: "Between you and me? Oh" },
+            { time: 141.595, text: "Oh, all I dream of is your eyes" },
+            { time: 147.991, text: "All I long for is your touch" },
+            { time: 151.836, text: "And darlin', something tells me, tells me it's enough, mmm" },
+            { time: 158.701, text: "You can say that I'm a fool" },
+            { time: 162.193, text: "And I don't know very much" },
+            { time: 165.786, text: "But I think they call-" },
+            { time: 169.493, text: "Oh, I think they call-" },
+            { time: 172.817, text: "Yes, I Think They Call This Love" }
+        ];
+
+        const song = document.getElementById("song");
+        const playButton = document.getElementById("play-button");
+        const lyricsContainer = document.getElementById("lyrics-container");
+
+        playButton.addEventListener("click", () => {
+            song.play();
+            playButton.style.display = "none";
+            syncLyrics();
+            createHearts();
+        });
+
+        function syncLyrics() {
+            let index = 0;
+            song.ontimeupdate = () => {
+                if (index < lyricsData.length && song.currentTime >= lyricsData[index].time) {
+                    lyricsContainer.innerText = lyricsData[index].text;
+                    index++;
+                }
+            };
+        }
+
+        function createHearts() {
+            setInterval(() => {
+                const heart = document.createElement("div");
+                heart.classList.add("heart");
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, 300);
+        }
+    </script>
+
+</body>
+</html>
